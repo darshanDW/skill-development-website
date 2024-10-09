@@ -1,96 +1,78 @@
 const mongoose = require('mongoose');
-const Content = require('./content');
-const usershema = new mongoose.Schema({
-    Username: {
-        type: String,
-        require: true
 
-    },
-    email: {
-        type: String,
-        require: true
-    },
-    password: {
-        type: String,
-        require: true
-
-    },
-
-    parent: {
-        type: Parents
-    },
-    child: {
-        type: Childs
-    }
-
-
-
-
-
-});
-const Users = mongoose.model('Users', usershema);
-
-
+// Parent Schema (remains the same)
 const parentschema = new mongoose.Schema({
     name: {
         type: String,
-        require: true
+        required: true
     },
     profession: {
         type: String,
-        require: true
+        required: true
     },
     phone_number: {
         type: String,
-        require: true
-
+        required: true,
+        unique: true
     },
     address: {
         type: String,
-        require: false
-
+        required: false
     }
-
-
-
 });
+
 const Parents = mongoose.model('Parents', parentschema);
 
+
+
+// Child Schema (remains the same)
 const childschema = new mongoose.Schema({
     name: {
         type: String,
-        require: true
-
+        required: true
     },
     DOB: {
         type: Date,
-        require: true
+        required: true
     },
-    Hobbies: {
-        type: Array,
-        require: false
-
+    hobbies: {
+        type: [String],
+        required: false
     },
     school_name: {
         type: String,
-        require: false
+        required: false
     },
     class: {
         type: Number,
-        require: true
-    },
-    content: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Content'
-    }],
+        required: true
+    }
 });
+const Childs = mongoose.model('Child', childschema);
 
+// User Schema (child is no longer an array)
+const userschema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    parent: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Parents'
+    },
+    child: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Child'
+    }
+});
+const Users = mongoose.model('Users', userschema);
 
-
-const Childs = mongoose.model('Childs', childschema);
-
-
-
-
-
-module.exports = Users, Parents, Childs;
+module.exports = { Users, Parents, Childs };

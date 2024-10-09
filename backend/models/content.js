@@ -21,10 +21,6 @@ admin:{
 
 
 
-
-
-
-
 });
 const Content = mongoose.model('Content', contentschema);
 module.exports = Content;
