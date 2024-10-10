@@ -1,10 +1,9 @@
-const express = require('express');
+const express = require('express')
 const { Users, Parents, Childs } = require('../models/user');
-const bcrypt = require('bcrypt');  
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const JWT_SECRET =require('./config');
+const { JWT_SECRET } = require('./config');
 const router = express.Router();
-
 router.post('/signup', async (req, res) => {
     try {
         // Check if user already exists
@@ -39,17 +38,17 @@ router.post('/signup', async (req, res) => {
             username: req.body.username,
             email: req.body.email,
             password: hashedPassword,
-            parent: parent,  
-            child: child     
+            parent: parent,
+            child: child
         });
 
         await newUser.save();
 
-         const token = jwt.sign({ userId: newUser._id },JWT_SECRET, { expiresIn: '1h' });
-
-         res.status(201).json({ msg: "User created successfully", token });
+        const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, { expiresIn: '1h' });
+        res.status(201).json({ msg: "User created successfully", token });
     } catch (error) {
-         res.status(500).json({ msg: "Server error", error });
+        console.log(error)
+        res.status(500).json({ msg: "Server error", error });
     }
 });
 
@@ -58,17 +57,17 @@ router.post('/signin', async (req, res) => {
     try {
         const { username, password, email } = req.body;
 
-         const user = await Users.findOne({ email: email });
+        const user = await Users.findOne({ email: email });
         if (!user) {
             return res.status(400).json({ msg: "User not registered" });
         }
 
-         const isPasswordValid = await bcrypt.compare(password, user.password);
+        const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(400).json({ msg: "Invalid password" });
         }
 
-         const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
 
         res.json({ msg: "Signin successful", token });
     } catch (error) {
