@@ -15,27 +15,14 @@ const SignUpPage = () => {
         city: '',
         class: '',
         hobbies: [],
-        otherHobby: ''
+        otherHobby: '',
+        dateOfBirth: '',
+        age: null,
     });
-    const [showOtherInput, setShowOtherInput] = useState(false);
 
+    const [showOtherInput, setShowOtherInput] = useState(false);
     const notify = (message) => toast.error(message);
 
-    useEffect(() => {
-        const classSelect = document.getElementById('classSelect');
-
-        const handleClassChange = () => {
-            const selectedOptions = Array.from(classSelect.selectedOptions);
-            const isOtherSelected = selectedOptions.some(option => option.value === 'Other');
-            setShowOtherInput(isOtherSelected);
-        };
-
-        classSelect.addEventListener('change', handleClassChange);
-
-        return () => {
-            classSelect.removeEventListener('change', handleClassChange);
-        };
-    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -57,6 +44,20 @@ const SignUpPage = () => {
             ...prev,
             hobbies: selectedValues,
         }));
+        // Check if "Other" is selected to show/hide the input
+        setShowOtherInput(selectedValues.includes('Other'));
+    };
+
+    const calculateAge = (dob) => {
+        const birthDate = new Date(dob);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
     };
 
     const handleSubmit = (e) => {
@@ -103,10 +104,22 @@ const SignUpPage = () => {
             notify('Class selection is required');
             return;
         }
+        // Validate hobbies
         if (showOtherInput && !formData.otherHobby) {
             notify("Please specify the other hobby");
             return;
         }
+
+        // Age validation
+        const age = calculateAge(formData.dateOfBirth);
+        if (age < 6 || age > 16) {
+            notify('Child must be between 6 to 16 years old');
+            return;
+        }
+        setFormData((prev) => ({
+            ...prev,
+            "age": age, // Store the calculated age in formData
+        }));
 
         // If all validations pass
         console.log('Form Data:', formData);
@@ -114,14 +127,12 @@ const SignUpPage = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-yellow-200 via-pink-200 to-orange-200">
+        <div className="min-h-screen flex items-center justify-center rounded-tr-[40px] rounded-bl-[40px] bg-gradient-to-r from-pink-200 via-yellow-200 to-blue-100">
             <ToastContainer />
-            <div className="bg-white my-10 p-8 rounded-lg shadow-lg border border-gray-200 min-w-[90%] md:min-w-[75%]">
-                <h1 className="text-4xl font-bold text-center mb-6 text-purple-700">
-                    Sign Up
-                </h1>
+            <div className="bg-white my-10 p-8 rounded-lg shadow-lg rounded-tl-[40px] rounded-br-[40px] border border-gray-200 min-w-[90%] md:min-w-[65%] md:px-20">
+                <h1 className="text-4xl font-bold text-center mb-6 text-purple-700">Sign Up</h1>
                 <form className="space-y-4" onSubmit={handleSubmit}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
                             <label htmlFor="email" className="block mb-2">Email:</label>
                             <input
@@ -176,8 +187,8 @@ const SignUpPage = () => {
                         </div>
                     </div>
 
-                    <h3 className='text-2xl font-bold text-center text-pink-500'>Parent</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <h3 className='text-2xl font-bold text-center pt-12 text-pink-500'>Parent</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
                             <label htmlFor="parentName" className="block mb-2">Parent Name:</label>
                             <input
@@ -207,8 +218,8 @@ const SignUpPage = () => {
                         </div>
                     </div>
 
-                    <h3 className='text-2xl font-bold text-center text-pink-500'>Child</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <h3 className='text-2xl font-bold text-center pt-12 text-pink-500'>Child</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
                             <label htmlFor="childName" className="block mb-2">Child Name:</label>
                             <input
@@ -221,29 +232,6 @@ const SignUpPage = () => {
                                 required
                                 className="w-full px-4 py-2 border rounded-md border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f9f8f4] shadow-sm"
                             />
-                        </div>
-                        <div>
-                            <label htmlFor="class" className="block mb-2">Class:</label>
-                            <select
-                                name="class"
-                                id="class"
-                                value={formData.class}
-                                onChange={handleChange}
-                                className="w-full px-4 py-2 border rounded-md border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f9f8f4] shadow-sm"
-                                required
-                            >
-                                <option value="" disabled>Select Class</option>
-                                <option value="1st">1st</option>
-                                <option value="2nd">2nd</option>
-                                <option value="3rd">3rd</option>
-                                <option value="4th">4th</option>
-                                <option value="5th">5th</option>
-                                <option value="6th">6th</option>
-                                <option value="7th">7th</option>
-                                <option value="8th">8th</option>
-                                <option value="9th">9th</option>
-                                <option value="10th">10th</option>
-                            </select>
                         </div>
                         <div>
                             <label htmlFor="schoolName" className="block mb-2">School Name:</label>
@@ -272,58 +260,83 @@ const SignUpPage = () => {
                             />
                         </div>
                         <div>
-                            <label htmlFor="classSelect" className="block mb-2">Hobbies:</label>
+                            <label htmlFor="dateOfBirth" className="block mb-2">Date of Birth:</label>
+                            <input
+                                type="date"
+                                name="dateOfBirth"
+                                id="dateOfBirth"
+                                value={formData.dateOfBirth}
+                                onChange={handleChange}
+                                required
+                                className="w-full px-4 py-2 border rounded-md border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f9f8f4] shadow-sm"
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="classSelect" className="block mb-2">Class:</label>
                             <select
+                                name="class"
                                 id="classSelect"
-                                multiple={true}
-                                value={formData.hobbies}
-                                onChange={handleHobbiesChange}
+                                onChange={handleChange}
                                 className="w-full px-4 py-2 border rounded-md border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f9f8f4] shadow-sm"
                                 required
                             >
-                                <option value="Swimming">Swimming</option>
-                                <option value="Singing">Singing</option>
-                                <option value="Dancing">Dancing</option>
-                                <option value="Playing Instrument">Playing Instrument</option>
+                                <option value="">Select Class</option>
+                                <option value="Class 1">Class 1</option>
+                                <option value="Class 2">Class 2</option>
+                                <option value="Class 3">Class 3</option>
+                                <option value="Class 4">Class 4</option>
+                                <option value="Class 5">Class 5</option>
+                                <option value="Class 6">Class 6</option>
+                                <option value="Class 7">Class 7</option>
+                                <option value="Class 8">Class 8</option>
+                                <option value="Class 9">Class 9</option>
+                                <option value="Class 10">Class 10</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label htmlFor="hobbies" className="block mb-2">Select Hobbies:</label>
+                            <select
+                                multiple
+                                name="hobbies"
+                                id="hobbies"
+                                onChange={handleHobbiesChange}
+                                className="w-full px-4 py-2 border rounded-md border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f9f8f4] shadow-sm"
+                            >
+                                <option value="Reading">Reading</option>
+                                <option value="Sports">Sports</option>
+                                <option value="Music">Music</option>
                                 <option value="Other">Other</option>
                             </select>
                         </div>
-                        {showOtherInput && (
-                            <div>
-                                <label htmlFor="otherHobby" className="block mb-2">Please specify if 'Other':</label>
-                                <input
-                                    type="text"
-                                    name="otherHobby"
-                                    id="otherHobby"
-                                    placeholder="Please specify if 'Other'"
-                                    value={formData.otherHobby}
-                                    onChange={handleChange}
-                                    className="mt-2 w-full h-12 px-4 py-2 border rounded-md border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f9f8f4] shadow-sm"
-                                />
-                            </div>
-                        )}
                     </div>
 
-                    <div className="flex items-center mb-4">
-                        <input
-                            type="checkbox"
-                            id="terms"
-                            className="mr-2 h-5 w-5"
-                            required
-                        />
-                        <label htmlFor="terms" className="text-gray-700">I agree to the Terms and Conditions</label>
-                    </div>
+                    {showOtherInput && (
+                        <div>
+                            <label htmlFor="otherHobby" className="block mb-2">Specify Other Hobby:</label>
+                            <input
+                                type="text"
+                                name="otherHobby"
+                                id="otherHobby"
+                                placeholder="Specify Other Hobby"
+                                value={formData.otherHobby}
+                                onChange={handleChange}
+                                className="w-full px-4 py-2 border rounded-md border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f9f8f4] shadow-sm"
+                            />
+                        </div>
+                    )}
+
+
                     <button
                         type="submit"
-                        className="w-full bg-pink-300 text-gray-800 py-2 rounded-md hover:bg-pink-500 transition duration-200 shadow-md"
+                        className="w-full px-4 py-2 text-white bg-purple-600 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                        Sign Up 
+                        Sign Up
                     </button>
                 </form>
-
                 <p className="mt-4 text-center text-gray-600">
-                    Already have an account?{' '}
-                    <a href="/login" className="text-gray-700 hover:text-gray-800">
+                    I have an account {" "}
+                    <a href="/login" className="text-pink-500 hover:text-pink-600">
                         Login
                     </a>
                 </p>
