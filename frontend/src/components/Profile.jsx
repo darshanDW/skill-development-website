@@ -4,9 +4,10 @@ import profile from '../assets/profile.png';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import LoginPage from './LoginPage';
 const Profile = () => {
   // Profile data object
-  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [profileData, setProfileData] = useState({
     Name: "",
@@ -16,26 +17,34 @@ const Profile = () => {
     contact: '',
   });
 
-
   useEffect(() => {
     const token = localStorage.getItem('token');
 
     if (token) {
       const decodedToken = jwtDecode(token);
       const currentTime = Date.now() / 1000;
-
       if (decodedToken.exp < currentTime) {
         console.log('Token expired');
-        navigate('/login');
-      } else {
-        getProfile();
+        toggleModal()
       }
-    } else {
-      console.log('No token found');
-      navigate('/login');
-    }
-  }, [navigate]);
+      else {
+        getProfile()
 
+      }
+
+
+
+    }
+    else {
+      toggleModal()
+    }
+
+  }, [])
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+  // Ensure you import the jwt-decode library
 
   const getProfile = async () => {
     try {
@@ -187,6 +196,16 @@ const Profile = () => {
           <button type="button" className="bg-gray-300 px-4 py-2 rounded">Cancel</button>
         </div>
       </form>
+      {
+        isModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+            <div className="relative bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+              {/* Render the LoginPage and pass closeModal prop */}
+              <LoginPage closeModal={toggleModal} />
+            </div>
+          </div>
+        )
+      }
     </div>
   );
 };

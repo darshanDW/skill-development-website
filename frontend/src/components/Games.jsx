@@ -7,11 +7,14 @@ import game4 from "../assets/game4.png";
 import game5 from "../assets/game5.png";
 import game6 from "../assets/game6.png";
 import { useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
 import { jwtDecode } from 'jwt-decode';
+import LoginPage from './LoginPage';
 function Games() {
   const [selectedGame, setSelectedGame] = useState(null);
-  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -22,13 +25,13 @@ function Games() {
 
       if (decodedToken.exp < currentTime) {
         console.log('Token expired');
-        navigate('/login');
+        toggleModal()
       }
     } else {
       console.log('No token found');
-      navigate('/login');
+      toggleModal()
     }
-  }, [navigate]);
+  }, []);
 
 
 
@@ -80,6 +83,15 @@ function Games() {
       {selectedGame && (
         <GameModal selectedGame={selectedGame} closeModal={closeModal} />
       )}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="relative bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+            {/* Render the LoginPage and pass closeModal prop */}
+            <LoginPage closeModal={toggleModal} />
+          </div>
+        </div>
+      )
+      }
     </div>
   );
 }

@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 // import { useNavigate } from 'react-router-dom'
+import { UserContext } from '../App';
+
+const LoginPage = ({ closeModal }) => {
+
+    const { setIsLoggedIn } = useContext(UserContext);
 
 
-const LoginPage = ({ closeModal, setIsLoggedIn }) => {
+
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -50,7 +55,9 @@ const LoginPage = ({ closeModal, setIsLoggedIn }) => {
                 console.log(response)
                 // Store the token in localStorage
                 localStorage.setItem('token', token);
+                console.log(1)
                 setIsLoggedIn(true)
+                console.log(2)
                 // Show success toast
 
                 // Navigate to the homepage
@@ -58,7 +65,7 @@ const LoginPage = ({ closeModal, setIsLoggedIn }) => {
                 console.log('Password:', password);
                 setFormData({ email: '', password: '' });
                 toast.success("Login Successfully!");
-                window.location.href = "/Profile";
+                window.location.href = "/";
             } else {
                 toast.error(response.data.msg || 'Login failed.');
             }

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import LoginPage from './LoginPage'; // Import LoginPage
 import { jwtDecode } from 'jwt-decode';
+import { UserContext } from '../App';
 const LoginButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // To control whether the login button should be displayed
-
+  const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
+  console.log(isLoggedIn)
   useEffect(() => {
     const token = localStorage.getItem('token');
 
@@ -21,8 +22,9 @@ const LoginButton = () => {
       }
 
     }
-    setIsLoggedIn(false)
-
+    else {
+      setIsLoggedIn(false)
+    }
   }, []);
 
   const toggleModal = () => {
@@ -43,22 +45,30 @@ const LoginButton = () => {
       {isLoggedIn && (
         <button
           className="p-2 px-4 border border-red-500 text-pink-500 rounded-full"
-
+          onClick={() => {
+            localStorage.removeItem('token');
+            setIsLoggedIn(false) // Remove the token from localStorage
+            window.location.reload(); // Reload the page to update the logged-in state
+          }}
         >
           Logout
         </button>
       )}
 
+
+
       {/* Display the modal when login button is clicked */}
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="relative bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-            {/* Render the LoginPage and pass closeModal prop */}
-            <LoginPage closeModal={toggleModal} setIsLoggedIn={setIsLoggedIn} />
+      {
+        isModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+            <div className="relative bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+              {/* Render the LoginPage and pass closeModal prop */}
+              <LoginPage closeModal={toggleModal} />
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )
+      }
+    </div >
   );
 };
 
