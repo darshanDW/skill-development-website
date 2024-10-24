@@ -11,8 +11,10 @@ const sendFormData = async (formData) => {
             },
         });
         console.log('Response:', response.data);
+        return true
     } catch (error) {
         console.log(error)
+        return
     }
 };
 
@@ -132,7 +134,7 @@ const SignUpPage = () => {
 
         // If all validations pass
         console.log('Form Data:', formData);
-        toast('Form submitted successfully!');
+        if (sendFormData(formData)) { toast('Form submitted successfully!'); }
 
     };
 

@@ -3,8 +3,11 @@ import React, { useState } from 'react';
 import profile from '../assets/profile.png';
 import { useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 const Profile = () => {
   // Profile data object
+  const navigate = useNavigate();
+
   const [profileData, setProfileData] = useState({
     Name: "",
     standard: '',
@@ -13,10 +16,26 @@ const Profile = () => {
     contact: '',
   });
 
+
   useEffect(() => {
-    getProfile()
-  }, [])
-  // Ensure you import the jwt-decode library
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+
+      if (decodedToken.exp < currentTime) {
+        console.log('Token expired');
+        navigate('/login');
+      } else {
+        getProfile();
+      }
+    } else {
+      console.log('No token found');
+      navigate('/login');
+    }
+  }, [navigate]);
+
 
   const getProfile = async () => {
     try {

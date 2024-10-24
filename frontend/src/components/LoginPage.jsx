@@ -6,7 +6,7 @@ import axios from 'axios';
 // import { useNavigate } from 'react-router-dom'
 
 
-const LoginPage = ({ closeModal }) => {
+const LoginPage = ({ closeModal, setIsLoggedIn }) => {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -50,7 +50,7 @@ const LoginPage = ({ closeModal }) => {
                 console.log(response)
                 // Store the token in localStorage
                 localStorage.setItem('token', token);
-
+                setIsLoggedIn(true)
                 // Show success toast
 
                 // Navigate to the homepage

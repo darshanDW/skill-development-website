@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import logo from '../assets/logo.png';
 import LoginButton from './LoginButton';
 import { FaBars, FaTimes } from 'react-icons/fa'; // Icons for hamburger and close menu
-
+import { jwtDecode } from 'jwt-decode';
 function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // State to track mobile menu
-
+  const token = localStorage.getItem('token');
+  if (token) {
+    const decodedToken = jwtDecode(token);
+    const currentTime = Date.now() / 1000;
+  }
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
   };
@@ -54,11 +58,30 @@ function Navbar() {
             <li className='cursor-pointer hover:text-black'><a href="/Games">Games</a></li>
             <li className='cursor-pointer hover:text-black'><a href="/Skill">Skill</a></li>
             <li>
-              <a href="/login">
-                <button className='w-full py-2 bg-pink-500 text-white rounded-full'>
-                  Login
-                </button>
-              </a>
+              {(() => {
+                if (token) {
+
+
+                  if (decodedToken.exp < currentTime) {
+                    return (
+                      <a href="/login">
+                        <button className='w-full py-2 bg-pink-500 text-white rounded-full'>
+                          Login
+                        </button>
+                      </a>
+                    );
+                  }
+                  else {
+                    return (
+                      <a>
+                        <button className='w-full py-2 bg-pink-500 text-white rounded-full'>
+                          Logout
+                        </button>
+                      </a>
+                    );
+                  }
+                }
+              })()}
             </li>
           </ul>
         </div>

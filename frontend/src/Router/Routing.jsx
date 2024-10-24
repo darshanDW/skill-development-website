@@ -20,6 +20,7 @@ function Routing() {
           <Route path='/signup' element={<SignUpPage />} ></Route>
           <Route path='/Games' element={<Games />} ></Route>
           <Route path='/Feedback' element={<Feedback />} ></Route>
+
         </Routes>
       </BrowserRouter>
     </div>

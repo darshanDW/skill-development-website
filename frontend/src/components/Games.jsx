@@ -6,10 +6,35 @@ import game3 from "../assets/game3.png";
 import game4 from "../assets/game4.png";
 import game5 from "../assets/game5.png";
 import game6 from "../assets/game6.png";
-
-
+import { useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from 'jwt-decode';
 function Games() {
   const [selectedGame, setSelectedGame] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+
+      if (decodedToken.exp < currentTime) {
+        console.log('Token expired');
+        navigate('/login');
+      }
+    } else {
+      console.log('No token found');
+      navigate('/login');
+    }
+  }, [navigate]);
+
+
+
+
+
+
 
   const games = [
     { name: 'Game 1', type: "iframe", description: 'Exciting puzzle game', image: game1, url: 'https://cdn.htmlgames.com/BalloonMaze/' },
