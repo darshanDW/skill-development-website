@@ -68,6 +68,7 @@ router.post('/signup', async (req, res) => {
 
         // Respond with a success message and the token
         res.status(201).json({ msg: "User created successfully", token });
+        res.end();
     } catch (error) {
         // Handle errors
         console.error(error);
@@ -91,16 +92,15 @@ router.post('/signin', async (req, res) => {
             return res.status(400).json({ msg: "User not registered" });
         }
 
-        console.log(user)
         // Compare the provided password with the stored hashed password
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(400).json({ msg: "Invalid password" });
         }
-
+        
         // Generate a JWT token for the user
         const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
-
+        
         // Respond with a success message and the token
         res.json({ msg: "Signin successful", token });
 

@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
+
 const adminschma = new mongoose.Schema({
     Username: {
         type: String,
         require: true
-
     },
     email: {
         type: String,
@@ -26,11 +26,6 @@ const adminschma = new mongoose.Schema({
             ref: 'Childs'
         }],
         
-    
-
-
-
-
 });
 const Admins = mongoose.model('Admins', adminschma);
-module.exports = Admins;
+module.exports = {Admins};
