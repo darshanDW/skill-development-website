@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
+import {useNavigate} from 'react-router-dom';
 
 const sendFormData = async (formData) => {
     try {
@@ -13,7 +14,7 @@ const sendFormData = async (formData) => {
         console.log('Response:', response.data);
         return true
     } catch (error) {
-        console.log(error)
+        console.log(error) 
         return
     }
 };
@@ -34,19 +35,21 @@ const SignUpPage = () => {
         dateOfBirth: '',
         age: null,
     });
-
+    
     const [showOtherInput, setShowOtherInput] = useState(false);
     const notify = (message) => toast.error(message);
-
-
+    
+    
     const handleChange = (e) => {
+        console.log("name and val is ")
         const { name, value } = e.target;
+        console.log(name,value)
         setFormData((prev) => ({
             ...prev,
             [name]: value,
         }));
     };
-
+    
     const handleHobbiesChange = (e) => {
         const options = e.target.options;
         const selectedValues = [];
@@ -62,80 +65,73 @@ const SignUpPage = () => {
         // Check if "Other" is selected to show/hide the input
         setShowOtherInput(selectedValues.includes('Other'));
     };
-
+    
     const calculateAge = (dob) => {
         const birthDate = new Date(dob);
         const today = new Date();
         let age = today.getFullYear() - birthDate.getFullYear();
         const monthDiff = today.getMonth() - birthDate.getMonth();
-
+        
         if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
             age--;
         }
         return age;
     };
-
-    const handleSubmit = (e) => {
+    
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validation
-        if (!formData.email) {
-            notify('Email is required');
-            return;
-        }
-        if (!formData.username) {
-            notify('Username is required');
-            return;
-        }
-        if (!formData.password) {
-            notify('Password is required');
-            return;
-        }
-        if (!formData.parentName) {
-            notify('Parent name is required');
-            return;
-        }
+        // Validate form data
+        if (!formData.email) return toast.error('Email is required');
+        if (!formData.username) return toast.error('Username is required');
+        if (!formData.password) return toast.error('Password is required');
+        if (!formData.parentName) return toast.error('Parent name is required');
         if (!formData.mobileNo || !/^\d{10}$/.test(formData.mobileNo)) {
-            notify('Valid mobile number (10 digits) is required');
-            return;
+            return toast.error('Valid mobile number (10 digits) is required');
         }
-        if (!formData.childName) {
-            notify('Child name is required');
-            return;
+        if (!formData.childName) return toast.error('Child name is required');
+        if (!formData.schoolName) return toast.error('School name is required');
+        if (!formData.city) return toast.error('City is required');
+        if (!formData.className || formData.className === '0') {
+            return toast.error('Class selection is required');
         }
-        if (!formData.schoolName) {
-            notify('School name is required');
-            return;
-        }
-        if (!formData.city) {
-            notify('City is required');
-            return;
-        }
-        if (!formData.className) {
-            notify('Class selection is required');
-            return;
-        }
-        // Validate hobbies
         if (showOtherInput && !formData.otherHobby) {
-            notify("Please specify the other hobby");
-            return;
+            return toast.error('Please specify the other hobby');
         }
 
-        // Age validation
+        // Validate age
         const age = calculateAge(formData.dateOfBirth);
         if (age < 6 || age > 16) {
-            notify('Child must be between 6 to 16 years old');
-            return;
+            return toast.error('Child must be between 6 to 16 years old');
         }
-        setFormData((prev) => ({
-            ...prev,
-            "age": age, // Store the calculated age in formData
-        }));
 
-        // If all validations pass
-        console.log('Form Data:', formData);
-        if (sendFormData(formData)) { toast('Form submitted successfully!'); }
+        // Update formData with calculated age
+        const updatedFormData = { ...formData, age };
+        setFormData(updatedFormData);
 
+        // Submit form data
+        const success = await sendFormData(updatedFormData);
+        if (success) {
+            toast.success('Form submitted successfully!');
+            setFormData({
+                email: '',
+                username: '',  
+                password: '',
+                parentName: '',
+                mobileNo: '',
+                childName: '',
+                schoolName: '',
+                city: '',
+                className: '',
+                hobbies: [],
+                otherHobby: '',
+                dateOfBirth: '',
+                age: null,
+            });
+             navigate('/');
+        } else {
+            toast.error('Failed to submit the form. Please try again.');
+        }
     };
 
     return (
@@ -275,23 +271,23 @@ const SignUpPage = () => {
                         <div>
                             <label htmlFor="classSelect" className="block mb-2">Class:</label>
                             <select
-                                name="class"
+                                name="className"
                                 id="classSelect"
                                 onChange={handleChange}
                                 className="w-full px-4 py-2 border rounded-md border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-[#f9f8f4] shadow-sm"
                                 required
                             >
-                                <option value="">Select Class</option>
-                                <option value="Class 1">Class 1</option>
-                                <option value="Class 2">Class 2</option>
-                                <option value="Class 3">Class 3</option>
-                                <option value="Class 4">Class 4</option>
-                                <option value="Class 5">Class 5</option>
-                                <option value="Class 6">Class 6</option>
-                                <option value="Class 7">Class 7</option>
-                                <option value="Class 8">Class 8</option>
-                                <option value="Class 9">Class 9</option>
-                                <option value="Class 10">Class 10</option>
+                                <option value={0}>Select Class</option>
+                                <option value={1}>Class 1</option>
+                                <option value={2}>Class 2</option>
+                                <option value={3}>Class 3</option>
+                                <option value={4}>Class 4</option>
+                                <option value={5}>Class 5</option>
+                                <option value={6}>Class 6</option>
+                                <option value={7}>Class 7</option>
+                                <option value={8}>Class 8</option>
+                                <option value={9}>Class 9</option>
+                                <option value={10}>Class 10</option>
                             </select>
                         </div>
                         <div>

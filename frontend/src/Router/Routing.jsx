@@ -7,6 +7,7 @@ import Profile from '../components/Profile';
 import Feedback from '../components/Feedback';
 import SignUpPage from '../components/SignUpPage';
 import Games from '../components/Games.jsx';
+import Admin_home from '../components/Admin/Admin_home.jsx';
 
 function Routing() {
   return (
@@ -20,6 +21,7 @@ function Routing() {
           <Route path='/signup' element={<SignUpPage />} ></Route>
           <Route path='/Games' element={<Games />} ></Route>
           <Route path='/Feedback' element={<Feedback />} ></Route>
+          <Route path='/Admin_home' element={<Admin_home />} ></Route>
 
         </Routes>
       </BrowserRouter>
