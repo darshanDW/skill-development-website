@@ -1,26 +1,40 @@
 const mongoose = require('mongoose');
-const Admins = require('./admin');
-const contentschema = new mongoose.Schema({
 
-topic:{
-    type:String,
-    require:true
-},
-content_link:{
-    type:{type:String,
-        require:false
-    },
-    require:false
-
-},
-admin:{
-    type:Admins,
-    require:true
-},
-
-
-
-
+// Schema for individual PDF links
+const pdfSchema = new mongoose.Schema({
+  link: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: false, // Optional description for the PDF
+  },
 });
-const Content = mongoose.model('Content', contentschema);
-module.exports = Content;
+
+// Schema for individual topics
+const topicSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  pdfs: {
+    type: [pdfSchema], // Array of PDF objects
+    required: true, // Each topic must have at least one PDF
+  },
+});
+
+// Schema for subjects
+const subjectSchema = new mongoose.Schema({
+  subject: {
+    type: String,
+    required: true, // Subject name is required
+  },
+  topics: {
+    type: [topicSchema], // Array of topic objects
+    required: true, // Each subject must have at least one topic
+  },
+});
+
+const Subject = mongoose.model('Subject', subjectSchema);
+module.exports = Subject;

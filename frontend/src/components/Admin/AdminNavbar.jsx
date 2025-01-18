@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
-import logo from '../assets/logo.png';
-import LoginButton from './LoginButton';
+import logo from '../../assets/logo.png';
+import LoginButton from '../LoginButton';
 import { FaBars, FaTimes } from 'react-icons/fa'; // Icons for hamburger and close menu
-import { UserContext } from '../App';
-function Navbar() {
+import { UserContext } from '../../App';
+function AdminNavbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // State to track mobile menu
   const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
 
@@ -29,12 +29,12 @@ function Navbar() {
         {/* Navigation Links - Hidden on small screens, visible on medium+ */}
         <div className='hidden md:flex gap-8'>
           <ul className='flex gap-8 pt-2 text-gray-700'>
-            <li className='cursor-pointer hover:text-black'><a href="/">Home</a></li>
+            {/* <li className='cursor-pointer hover:text-black'><a href="/">Home</a></li> */}
             <li className='cursor-pointer hover:text-black'><a href="/Skills">Skill</a></li>
-            <li className='cursor-pointer hover:text-black'><a href="/Games">Games</a></li>
-            <li className='cursor-pointer hover:text-black'><a href="/Profile">Profile</a></li>
-            <li className='cursor-pointer hover:text-black'><a href="/Contact">Contact Us</a></li>
-            <li className='cursor-pointer hover:text-black'><a href="/Feedback">Feedback</a></li>
+            {/* <li className='cursor-pointer hover:text-black'><a href="/Games">Games</a></li> */}
+            {/* <li className='cursor-pointer hover:text-black'><a href="/Profile">Profile</a></li> */}
+            {/* <li className='cursor-pointer hover:text-black'><a href="/Contact">Contact Us</a></li> */}
+            {/* <li className='cursor-pointer hover:text-black'><a href="/Feedback">Feedback</a></li> */}
           </ul>
         </div>
 
@@ -80,4 +80,4 @@ function Navbar() {
   );
 };
 
-export default Navbar;
+export default AdminNavbar;

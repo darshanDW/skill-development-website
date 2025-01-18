@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import LoginPage from './LoginPage'; // Import LoginPage
 import { jwtDecode } from 'jwt-decode';
 import { UserContext } from '../App';
+
 const LoginButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
