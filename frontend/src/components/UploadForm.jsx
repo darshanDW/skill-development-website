@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { gapi } from 'gapi-script';
 
-const CLIENT_ID = '675295653053-t77s1j4624fsopd527ivue3ci4i40ltq.apps.googleusercontent.com'; // Replace with your Google Client ID
-const API_KEY = 'AIzaSyCduodz7f02Om5pvPK6mQkwC2OdMKl8ZaQ'; // Replace with your API Key
+
+const CLIENT_ID = process.env.CLIENT_ID; // Replace with your Google Client ID
+const API_KEY = process.env.API_KEY; // Replace with your API Key
 const SCOPE = 'https://www.googleapis.com/auth/drive.file';
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
 
