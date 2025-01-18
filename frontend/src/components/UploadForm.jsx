@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { gapi } from 'gapi-script';
 
 
-const CLIENT_ID = process.env.CLIENT_ID; // Replace with your Google Client ID
-const API_KEY = process.env.API_KEY; // Replace with your API Key
+const CLIENT_ID = import.meta.env.VITE_CLIENT_ID; // Replace with your Google Client ID
+const API_KEY = import.meta.env.VITE_API_KEY; // Replace with your API Key
 const SCOPE = 'https://www.googleapis.com/auth/drive.file';
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
 
@@ -44,7 +44,7 @@ const UploadForm = ({ onClose }) => {
   };
 
   const handleFileUpload = async () => {
-    if (!file) {
+    if (!file) { 
       alert('Please select a file to upload.');
       return;
     }
@@ -58,7 +58,7 @@ const UploadForm = ({ onClose }) => {
       const metadata = {
         name: file.name,
         mimeType: file.type,
-        parents: ['1OJjKDCNZl2i6Q_VyrEYL5rnLVZPkLqRd'], // Replace with your folder ID
+        parents: [import.meta.env.VITE_FOLDER_ID], // Replace with your folder ID
       };
 
       const form = new FormData();
