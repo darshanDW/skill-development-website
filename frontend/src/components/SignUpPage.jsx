@@ -48,6 +48,7 @@ const SignUpPage = () => {
             ...prev,
             [name]: value,
         }));
+
     };
     
     const handleHobbiesChange = (e) => {

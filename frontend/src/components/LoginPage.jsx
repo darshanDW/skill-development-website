@@ -63,9 +63,14 @@ const LoginPage = ({ closeModal }) => {
                 console.log('Email:', email);
                 console.log('Password:', password);
                 setFormData({ email: '', password: '' });
+// <<<<<<< Updated upstream
                 toast.success("Login Successfully!");
                 customer==='admin' ? window.location.href = "/Admin_home" :window.location.href = "/";
 
+
+                toast.success("Login Successfully!",);
+                window.location.href = "/";
+// >>>>>>> Stashed changes
             } else {
                 toast.error(response.data.msg || 'Login failed.');
             }

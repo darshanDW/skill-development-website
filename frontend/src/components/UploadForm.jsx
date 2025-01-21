@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { gapi } from 'gapi-script';
 import axios from 'axios';
-
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID; // Replace with your Google Client ID
 const API_KEY = import.meta.env.VITE_API_KEY; // Replace with your API Key
 const SCOPE = 'https://www.googleapis.com/auth/drive.file';
@@ -100,6 +99,7 @@ const UploadForm = ({ onClose }) => {
             "Authorization": 'Bearer ' + token,
           }
         });
+
         console.log('Backend response:', backendResponse.data);
         alert('Data sent to backend successfully!');
       } catch (backendError) {
