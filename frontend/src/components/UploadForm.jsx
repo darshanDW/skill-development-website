@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { gapi } from 'gapi-script';
-
+import axios from 'axios';
 
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID; // Replace with your Google Client ID
 const API_KEY = import.meta.env.VITE_API_KEY; // Replace with your API Key
@@ -80,8 +80,33 @@ const UploadForm = ({ onClose }) => {
       );
 
       const result = await response.json();
-      console.log(result)
+      console.log(result);
       alert(`File uploaded successfully! File ID: ${result.id}`);
+
+      // Send subject, topic, and file URL to the backend
+      const pdf_link = `https://drive.google.com/file/d/${result.id}/view`;
+      const postData = {
+        subject,
+        topic,
+        pdf_link
+      };
+      console.log('Sending data to backend:', postData); // Debugging line
+
+      try {
+        const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+        const backendResponse = await axios.post('http://localhost:3000/admin/upload_file', postData, {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": 'Bearer ' + token,
+          }
+        });
+        console.log('Backend response:', backendResponse.data);
+        alert('Data sent to backend successfully!');
+      } catch (backendError) {
+        console.error('Error from backend:', backendError.response ? backendError.response.data : backendError.message);
+        alert(`Error from backend: ${backendError.response ? backendError.response.data.msg : backendError.message}`);
+      }
+
       onClose();
     } catch (error) {
       console.error('Error uploading file:', error);

@@ -10,8 +10,9 @@ const auth_middleware = (req, res, next) => {
             msg: "invalid user"
         })
     }
-
+    
     const token = auth_header.split(' ')[1];
+    console.log(token)
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET)

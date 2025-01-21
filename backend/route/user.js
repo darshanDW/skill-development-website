@@ -11,8 +11,7 @@ const { auth_middleware } = require('./middleware')
 router.post('/signup', async (req, res) => {
     try {
         // Log the incoming request for debugging
-        console.log("qwertyuiopoihgfdsxcvb")
-        console.log(req.body);
+         console.log(req.body);
 
         // Destructure request body to extract the required fields
         const { email, username, password, parentName, mobileNo, childName, schoolName, city, className, hobbies, otherHobby, dateOfBirth, age } = req.body;
@@ -117,12 +116,12 @@ router.get('/profile', auth_middleware, async (req, res) => {
         const userId = req.userid
         const user = await Users.findById(userId)
         if (!user) {
-            return res.status(400).json({ msg: "UUser not found msg in /profile backend" })
+            return res.status(400).json({ msg: "User not found" })
         }
         const child_id = user.child
         const child = await Childs.findById(child_id)
         if (!child) {
-            return res.status(400).json({ msg: " child not found" })
+            return res.status(400).json({ msg: "Child not found" })
         }
 
         return res.status(200).json({
@@ -132,7 +131,7 @@ router.get('/profile', auth_middleware, async (req, res) => {
 
     } catch (err) {
         // console.log(err)
-        res.status(500).json({ msg: "Server error in / profile", err });
+        res.status(500).json({ msg: "Server error in /profile", err });
 
     }
 

@@ -1,12 +1,12 @@
 const express = require('express');
-const { Users, Parents, Childs } = require('../models/user');
+const { Users } = require('../models/user');
 const { Admins } = require('../models/admin');
 const { auth_middleware } = require('./middleware');
 const bcrypt = require('bcrypt');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('./config');
-const Content = require('../models/content');
+const {Subjects} = require('../models/content');
 
 router.post('/signin', async (req, res) => {
     try {
@@ -25,7 +25,7 @@ router.post('/signin', async (req, res) => {
         console.log(Admin);
         console.log("pass");
         console.log(password, Admin.password);
-        const isPasswordValid = await bcrypt.compare(password, Admin.password);
+        const isPasswordValid = bcrypt.compare(password, Admin.password);
         console.log(isPasswordValid);
         if (!isPasswordValid) {
             return res.status(400).json({ msg: "Invalid password" });
@@ -52,7 +52,7 @@ router.get('/all_user', auth_middleware, async (req, res) => {
 
 router.get('/all_content', auth_middleware, async (req, res) => {
     try {
-        const content = await Content.find({}).lean();
+        const content = await Subjects.find({}).lean();
         res.json({ msg: "get all content", content });
     } catch (error) {
         console.log(error);
@@ -68,21 +68,24 @@ router.post('/upload_file', auth_middleware, async (req, res) => {
             return res.status(400).json({ msg: "Subject, topic, and PDF link are required" });
         }
 
-        // Check if the subject already exists
-        let existingSubject = await Subject.findOne({ subject });
+        // Normalize subject to handle case and whitespace
+        const normalizedSubject = subject.trim().toLowerCase();
+
+        // Check if the subject already exists (case-insensitive)
+        let existingSubject = await Subjects.findOne({ subject: new RegExp(`^${normalizedSubject}$`, 'i') });
 
         if (existingSubject) {
-            // Find if the topic already exists within the subject
-            const existingTopic = existingSubject.topics.find(t => t.name === topic);
+            // Check if the topic already exists within the subject
+            const existingTopic = existingSubject.topics.find(t => t.name.toLowerCase() === topic.trim().toLowerCase());
 
             if (existingTopic) {
                 // Add the new PDF to the existing topic
-                existingTopic.pdfs.push({ link: pdf_link, description });
+                existingTopic.pdfs.push({ link: pdf_link });
             } else {
                 // Add a new topic with the PDF
                 existingSubject.topics.push({
-                    name: topic,
-                    pdfs: [{ link: pdf_link, description }],
+                    name: topic.trim(),
+                    pdfs: [{ link: pdf_link }],
                 });
             }
 
@@ -91,11 +94,11 @@ router.post('/upload_file', auth_middleware, async (req, res) => {
             res.json({ msg: "File uploaded and added to existing subject", subject: existingSubject });
         } else {
             // Create a new subject with the provided topic and PDF
-            const newSubject = new Subject({
-                subject,
+            const newSubject = new Subjects({
+                subject: normalizedSubject,
                 topics: [{
-                    name: topic,
-                    pdfs: [{ link: pdf_link, description }],
+                    name: topic.trim(),
+                    pdfs: [{ link: pdf_link }],
                 }],
             });
 
@@ -107,6 +110,5 @@ router.post('/upload_file', auth_middleware, async (req, res) => {
         res.status(500).json({ msg: "Server error", error });
     }
 });
-
 
 module.exports = router;
