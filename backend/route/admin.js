@@ -1,5 +1,5 @@
 const express = require('express');
-const { Users } = require('../models/user');
+const { Parents } = require('../models/user');
 const { Admins } = require('../models/admin');
 const { auth_middleware } = require('./middleware');
 const bcrypt = require('bcrypt');
@@ -42,7 +42,7 @@ router.post('/signin', async (req, res) => {
 
 router.get('/all_user', auth_middleware, async (req, res) => {
     try {
-        const users = await Users.find({}).lean();
+        const users = await Parents.find({}).lean();
         res.json({ msg: "get all user", users });
     } catch (error) {
         console.log(error);

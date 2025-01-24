@@ -16,6 +16,10 @@ const parentschema = new mongoose.Schema({
         type: Number,
         required: true,
         unique: true
+    },
+    email: {
+        type: String,
+        required: true
     }
     // ,
     // address: {

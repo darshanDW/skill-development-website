@@ -35,6 +35,7 @@ router.post('/signup', async (req, res) => {
         const parent = new Parents({
             name: parentName,
             phone_number: mobileNo,
+            email: email
         });
 
         const child = new Childs({
@@ -50,7 +51,7 @@ router.post('/signup', async (req, res) => {
 
         // Save parent and child records to MongoDB
         await Promise.all([parent.save(), child.save()]);
-
+        
         // Create a new user and save the references to parent and child objects
         const newUser = new Users({
             username,
