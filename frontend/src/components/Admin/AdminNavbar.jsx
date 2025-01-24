@@ -29,12 +29,9 @@ function AdminNavbar() {
         {/* Navigation Links - Hidden on small screens, visible on medium+ */}
         <div className='hidden md:flex gap-8'>
           <ul className='flex gap-8 pt-2 text-gray-700'>
-            {/* <li className='cursor-pointer hover:text-black'><a href="/">Home</a></li> */}
+            <li className='cursor-pointer hover:text-black'><a href="/Admin_home">User_List</a></li>
             <li className='cursor-pointer hover:text-black'><a href="/Skills">Skill</a></li>
-            {/* <li className='cursor-pointer hover:text-black'><a href="/Games">Games</a></li> */}
-            {/* <li className='cursor-pointer hover:text-black'><a href="/Profile">Profile</a></li> */}
-            {/* <li className='cursor-pointer hover:text-black'><a href="/Contact">Contact Us</a></li> */}
-            {/* <li className='cursor-pointer hover:text-black'><a href="/Feedback">Feedback</a></li> */}
+      
           </ul>
         </div>
 
@@ -48,12 +45,9 @@ function AdminNavbar() {
       {isMobileMenuOpen && (
         <div className='md:hidden mt-4'>
           <ul className='flex flex-col gap-4 text-gray-700'>
-            <li className='cursor-pointer hover:text-black'><a href="/">Home</a></li>
+            <li className='cursor-pointer hover:text-black'><a href="/Admin_home">Contact_list</a></li>
             <li className='cursor-pointer hover:text-black'><a href="/Profile">Profile</a></li>
-            <li className='cursor-pointer hover:text-black'><a href="/Contact">Contact Us</a></li>
-            <li className='cursor-pointer hover:text-black'><a href="/Feedback">Feedback</a></li>
-            <li className='cursor-pointer hover:text-black'><a href="/Games">Games</a></li>
-            <li className='cursor-pointer hover:text-black'><a href="/Skill">Skill</a></li>
+           
             {isLoggedIn ? (
               <button
                 className='w-full py-2 bg-pink-500 text-white rounded-full'

@@ -144,7 +144,7 @@ const SkillsPage = () => {
                     </summary>
                     <div className="mt-2 space-y-2">
                       {topic.pdfs.map((pdf, pdfIndex) => (
-                        <p key={pdfIndex} className="ml-4 text-gray-700">
+                        <p key={pdfIndex} className=" flex ml-4 text-gray-700">
                           PDF Link: <a
                             href={pdf.link}
                             target="_blank"
@@ -153,7 +153,7 @@ const SkillsPage = () => {
                             {pdf.link}
                           </a>
                           <br />
-                          {isAdmin && <button className="w-20 bg-pink-500 text-white py-2 rounded-md hover:bg-pink-600 transition duration-200" onClick={() => handleDelete(subjectData._id, topic._id, pdf._id)}
+                          {isAdmin && <button className="flex-row ml-1 px-1  bg-pink-500 text-white text-sm rounded-md hover:bg-pink-600 transition duration-200" onClick={() => handleDelete(subjectData._id, topic._id, pdf._id)}
                           >delete</button>}
                         </p>
                       ))}
