@@ -111,4 +111,55 @@ router.post('/upload_file', auth_middleware, async (req, res) => {
     }
 });
 
+// DELETE route to remove a specific PDF
+router.delete("/delete_link", async (req, res) => {
+    const { subjectId, topicId, pdfId } = req.body;
+  console.log(req.body)
+    try {
+      // Find the subject by ID
+      const subject = await Subjects.findById(subjectId);
+  
+      if (!subject) {
+        return res.status(404).json({ error: "Subject not found" });
+      }
+  
+      // Find the topic within the subject
+      const topic = subject.topics.id(topicId);
+  
+      if (!topic) {
+        return res.status(404).json({ error: "Topic not found" });
+      }
+  
+      // Find and remove the PDF within the topic
+      const pdfIndex = topic.pdfs.findIndex((pdf) => pdf._id.toString() === pdfId);
+  
+      if (pdfIndex === -1) {
+        return res.status(404).json({ error: "PDF not found" });
+      }
+  
+      topic.pdfs.splice(pdfIndex, 1); // Remove the PDF
+  
+      // If the PDFs array becomes empty, remove the topic
+      if (topic.pdfs.length === 0) {
+        subject.topics.pull(topic._id);
+      }
+  
+      // If the topics array becomes empty, remove the subject
+      if (subject.topics.length === 0) {
+        await subject.deleteOne();
+        return res.status(200).json({ message: "Subject and its topics were deleted" });
+      }
+  
+      // Save the updated subject document
+      await subject.save();
+  
+      res.status(200).json({ message: "PDF deleted successfully" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "An error occurred while deleting the PDF" });
+    }
+  });
+
+
+
 module.exports = router;
