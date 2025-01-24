@@ -2,12 +2,16 @@ import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../App';
 import UploadForm from './UploadForm';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode'
+import LoginPage from './LoginPage';
 
 const SkillsPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [isFormOpen, setIsFormOpen] = useState(false);
   const { isAdmin } = useContext(UserContext);
   const [skillsData, setSkillsData] = useState([]);
-    const fetchData = async () => {
+  const fetchData = async () => {
     try {
       const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
       const response = await axios.get('http://localhost:3000/admin/all_content', {
@@ -23,12 +27,33 @@ const SkillsPage = () => {
       console.error('Error fetching data:', error);
     }
   };
-
   useEffect(() => {
- 
-    fetchData();
-  }, []);
+    const token = localStorage.getItem('token');
 
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+      if (decodedToken.exp < currentTime) {
+        console.log('Token expired');
+        toggleModal()
+      }
+      else {
+        fetchData()
+
+      }
+
+
+
+    }
+    else {
+      toggleModal()
+    }
+
+  }, [])
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
   const handleUploadClick = () => {
     setIsFormOpen(true);
   };
@@ -71,7 +96,7 @@ const SkillsPage = () => {
                   return topic;
                 })
                 .filter((topic) => topic.pdfs.length > 0); // Remove empty topics
-  
+
               return updatedTopics.length > 0
                 ? { ...subject, topics: updatedTopics }
                 : null; // Remove empty subjects
@@ -127,7 +152,8 @@ const SkillsPage = () => {
                             className="text-blue-500 underline hover:text-blue-700">
                             {pdf.link}
                           </a>
-                          {isAdmin && <button onClick={() => handleDelete(subjectData._id, topic._id, pdf._id)}
+                          <br />
+                          {isAdmin && <button className="w-20 bg-pink-500 text-white py-2 rounded-md hover:bg-pink-600 transition duration-200" onClick={() => handleDelete(subjectData._id, topic._id, pdf._id)}
                           >delete</button>}
                         </p>
                       ))}
@@ -139,6 +165,16 @@ const SkillsPage = () => {
           ))}
         </div>
       </div>
+      {
+        isModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+            <div className="relative bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+              {/* Render the LoginPage and pass closeModal prop */}
+              <LoginPage closeModal={toggleModal} />
+            </div>
+          </div>
+        )
+      }
     </div>
   );
 };
