@@ -4,7 +4,7 @@ import { Header } from './component/Avatar.jsx';
 import Options from './Options.jsx';
 import StartBtn from './Component/StartBtn.jsx';
 
-const config = {
+const Config = {
   botName: 'BUDDY BOT',
   initialMessages: [createChatBotMessage(`Welcome to BUDDY,click on start button to start!`, {
     widget: "startBtn"
@@ -27,4 +27,4 @@ const config = {
   ],
 };
 
-export default config;
+export default Config;
