@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import LoginPage from './LoginPage';
+import { backendUrl } from '../App';
 const Profile = () => {
   // Profile data object
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,7 +68,7 @@ const Profile = () => {
       console.log('Decoded User ID:', userId);
 
       // Send a GET request to fetch the profile
-      const res = await axios.get('http://localhost:3000/user/profile', {
+      const res = await axios.get(`${backendUrl}/user/profile`, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": 'Bearer ' + token,

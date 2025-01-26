@@ -3,9 +3,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 // import { useNavigate } from 'react-router-dom'
+import { backendUrl } from '../App.jsx';
 import { UserContext } from '../App';
 const LoginPage = ({ closeModal }) => {
-    const [customer,setcustomer]=useState('user')
+    const [customer, setcustomer] = useState('user')
+    console.log(backendUrl)
+
 
     const { setIsLoggedIn } = useContext(UserContext);
 
@@ -43,7 +46,7 @@ const LoginPage = ({ closeModal }) => {
 
         try {
             // Make a POST request using axios
-            const response = await axios.post(`http://localhost:3000/${customer}/signin`, {
+            const response = await axios.post(`${backendUrl}/${customer}/signin`, {
                 email,
                 password,
             });
@@ -63,20 +66,20 @@ const LoginPage = ({ closeModal }) => {
                 console.log('Email:', email);
                 console.log('Password:', password);
                 setFormData({ email: '', password: '' });
-// <<<<<<< Updated upstream
+                // <<<<<<< Updated upstream
                 toast.success("Login Successfully!");
-                customer==='admin' ? window.location.href = "/Admin_home" :window.location.href = "/";
+                customer === 'admin' ? window.location.href = "/Admin_home" : window.location.href = "/";
 
 
                 toast.success("Login Successfully!",);
                 window.location.href = "/";
-// >>>>>>> Stashed changes
+                // >>>>>>> Stashed changes
             } else {
                 toast.error(response.data.msg || 'Login failed.');
             }
         } catch (error) {
             // Handle error scenarios
-            console.log("error in login",error);
+            console.log("error in login", error);
             if (error.response) {
                 // Server responded with a status other than 200 range
                 toast.error(error.response.data.msg || 'Login failed.');
@@ -96,7 +99,7 @@ const LoginPage = ({ closeModal }) => {
 
             <ToastContainer />
             <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
-               {customer } Login
+                {customer} Login
             </h1>
             <form className="space-y-4" onSubmit={handleSubmit}>
                 <input
@@ -111,16 +114,16 @@ const LoginPage = ({ closeModal }) => {
                     type="submit"
                     className="w-full bg-pink-500 text-white py-2 rounded-md hover:bg-pink-600 transition duration-200"
                 >
-                  Login 
+                    Login
                 </button>
             </form>
             <p>
-        {customer === 'user' ? (
-          <button onClick={()=>{setcustomer('admin')}}>login as admin</button>
-        ) : (
-<button>login as user</button>
-        )}
-      </p>
+                {customer === 'user' ? (
+                    <button onClick={() => { setcustomer('admin') }}>login as admin</button>
+                ) : (
+                    <button>login as user</button>
+                )}
+            </p>
             <p className="mt-4 text-center text-gray-600">
                 Don't have an account?{' '}
                 <a href="/signup" className="text-pink-500 hover:text-pink-600">

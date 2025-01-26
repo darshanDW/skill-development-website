@@ -3,10 +3,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
 import {useNavigate} from 'react-router-dom';
-
+import { backendUrl } from '../App';
 const sendFormData = async (formData) => {
     try {
-        const response = await axios.post('http://localhost:3000/user/signup', formData, {
+        const response = await axios.post(`${backendUrl}/user/signup`, formData, {
             headers: {
                 'Content-Type': 'application/json',
             },

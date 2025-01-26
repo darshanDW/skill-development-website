@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { gapi } from 'gapi-script';
 import axios from 'axios';
+import { backendUrl } from '../App';
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID; // Replace with your Google Client ID
 const API_KEY = import.meta.env.VITE_API_KEY; // Replace with your API Key
 const SCOPE = 'https://www.googleapis.com/auth/drive.file';
@@ -93,7 +94,7 @@ const UploadForm = ({ onClose }) => {
 
       try {
         const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
-        const backendResponse = await axios.post('http://localhost:3000/admin/upload_file', postData, {
+        const backendResponse = await axios.post(`${backendUrl}/admin/upload_file`, postData, {
           headers: {
             "Content-Type": "application/json",
             "Authorization": 'Bearer ' + token,

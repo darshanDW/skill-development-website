@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { UserContext } from '../App';
+import { backendUrl, UserContext } from '../App';
 import UploadForm from './UploadForm';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode'
@@ -14,7 +14,7 @@ const SkillsPage = () => {
   const fetchData = async () => {
     try {
       const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
-      const response = await axios.get('http://localhost:3000/admin/all_content', {
+      const response = await axios.get(`${backendUrl}/admin/all_content`, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": 'Bearer ' + token,
@@ -71,7 +71,7 @@ const SkillsPage = () => {
     try {
       const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
 
-      const response = await axios.delete('http://localhost:3000/admin/delete_link', {
+      const response = await axios.delete(`${backendUrl}/admin/delete_link`, {
 
 
         headers: {

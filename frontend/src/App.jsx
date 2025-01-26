@@ -8,6 +8,7 @@ import { useState } from 'react';
 
 
 export const UserContext = React.createContext(null);
+export const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
