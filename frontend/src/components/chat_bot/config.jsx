@@ -1,6 +1,6 @@
 import { createChatBotMessage } from 'react-chatbot-kit';
-import { Avatar } from '../chat_bot/component/Avatar.jsx';
-import { Header } from '../chat_bot/component/Avatar.jsx';
+import { Avatar } from './component/Avatar.jsx';
+import { Header } from './component/Avatar.jsx';
 import Options from './Options.jsx';
 import StartBtn from './Component/StartBtn.jsx';
 
