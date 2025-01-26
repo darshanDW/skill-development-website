@@ -2,8 +2,7 @@ import { createChatBotMessage } from 'react-chatbot-kit';
 import { Avatar } from './component/Avatar.jsx';
 import { Header } from './component/Avatar.jsx';
 import Options from './Options.jsx';
-import StartBtn from './Component/StartBtn.jsx';
-
+import StartBtn from './component/StartBtn.jsx'
 const Config = {
   botName: 'BUDDY BOT',
   initialMessages: [createChatBotMessage(`Welcome to BUDDY,click on start button to start!`, {
