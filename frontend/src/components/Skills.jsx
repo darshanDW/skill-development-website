@@ -64,6 +64,10 @@ const SkillsPage = () => {
   };
 
   const handleDelete = async (subjectId, topicId, pdfId) => {
+
+    const confirmDelete = window.confirm("Do you really want to delete this PDF?");
+    if (!confirmDelete) return;
+
     try {
       const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
 

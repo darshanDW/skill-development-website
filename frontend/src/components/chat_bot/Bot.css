@@ -1,0 +1,126 @@
+/* Universal Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Bot Container */
+.bot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background: linear-gradient(to right, #61045F, #AA076B);
+    font-family: 'Arial', sans-serif;
+}
+
+/* Chatbot Container */
+.react-chatbot-kit-chat-container {
+    width: 90%;
+    max-width: 400px;
+    height: 500px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Chatbot Messages */
+.react-chatbot-kit-chat-bot-message {
+    margin: 10px;
+    padding: 10px 15px;
+    background-color: #f07bb7;
+    color: white;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.react-chatbot-kit-chat-bot-message-arrow {
+    border-right: 8px solid #f07bb7;
+}
+
+/* Send Button */
+.react-chatbot-kit-chat-btn-send {
+    background-color: #04611b;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.react-chatbot-kit-chat-btn-send:hover {
+    background-color: #044d16;
+}
+
+/* Avatar */
+.ADE {
+    background-color: #AA076B;
+    width: 50px;
+    height: 50px;
+    display: grid;
+    place-items: center;
+    color: white;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Start Button */
+.start-btn {
+    background-color: #f460ad;
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.start-btn:hover {
+    background-color: #d54c97;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .react-chatbot-kit-chat-container {
+        height: 450px;
+    }
+
+    .react-chatbot-kit-chat-bot-message {
+        font-size: 0.8rem;
+        padding: 8px 12px;
+    }
+
+    .react-chatbot-kit-chat-btn-send {
+        padding: 0.4rem 0.8rem;
+    }
+
+    .ADE {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .react-chatbot-kit-chat-container {
+        width: 95%;
+        height: 400px;
+    }
+
+    .start-btn {
+        padding: 0.5rem 1rem;
+    }
+}
