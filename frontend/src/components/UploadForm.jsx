@@ -10,6 +10,7 @@ const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/r
 const UploadForm = ({ onClose }) => {
   const [subject, setSubject] = useState('');
   const [topic, setTopic] = useState('');
+  const [pdf_name, setpdf_name] = useState('');
   const [file, setFile] = useState(null);
 
   const initializeGapi = () => {
@@ -80,18 +81,17 @@ const UploadForm = ({ onClose }) => {
       );
 
       const result = await response.json();
-      console.log(result);
-      alert(`File uploaded successfully! File ID: ${result.id}`);
+       alert(`File uploaded successfully! File ID: ${result.id}`);
 
       // Send subject, topic, and file URL to the backend
       const pdf_link = `https://drive.google.com/file/d/${result.id}/view`;
       const postData = {
         subject,
         topic,
-        pdf_link
+        pdf_link,
+        pdf_name
       };
-      console.log('Sending data to backend:', postData); // Debugging line
-
+ 
       try {
         const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
         const backendResponse = await axios.post(`${backendUrl}/admin/upload_file`, postData, {
@@ -101,8 +101,7 @@ const UploadForm = ({ onClose }) => {
           }
         });
 
-        console.log('Backend response:', backendResponse.data);
-        alert('Data sent to backend successfully!');
+         alert('Data sent to backend successfully!');
       } catch (backendError) {
         console.error('Error from backend:', backendError.response ? backendError.response.data : backendError.message);
         alert(`Error from backend: ${backendError.response ? backendError.response.data.msg : backendError.message}`);
@@ -142,6 +141,16 @@ const UploadForm = ({ onClose }) => {
               type="text"
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
+              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">PDF Name</label>
+            <input
+              type="text"
+              value={pdf_name}
+              onChange={(e) => setpdf_name(e.target.value)}
               className="mt-1 p-2 border border-gray-300 rounded-md w-full"
               required
             />

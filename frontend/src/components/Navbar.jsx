@@ -53,26 +53,10 @@ function Navbar() {
             <li className='cursor-pointer hover:text-black'><a href="/Contact">Contact Us</a></li>
             <li className='cursor-pointer hover:text-black'><a href="/Feedback">Feedback</a></li>
             <li className='cursor-pointer hover:text-black'><a href="/Games">Games</a></li>
-            <li className='cursor-pointer hover:text-black'><a href="/Skill">Skill</a></li>
-            {isLoggedIn ? (
-              <button
-                className='w-full py-2 bg-pink-500 text-white rounded-full'
-                onClick={() => {
-                  localStorage.removeItem('token');
-                  setIsLoggedIn(false)
-                  window.location.reload();
-                }}
-              >
-                Logout
-              </button>
-            ) : (
-              <button
-                className='w-full py-2 bg-pink-500 text-white rounded-full'
-                onClick={toggleMobileMenu}
-              >
-                Login
-              </button>
-            )}
+            <li className='cursor-pointer hover:text-black'><a href="/Skills">Skill</a></li>
+            <div className=' md:block'>
+              <LoginButton />
+            </div>
           </ul>
         </div>
       )}

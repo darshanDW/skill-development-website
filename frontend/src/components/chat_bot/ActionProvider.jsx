@@ -1,25 +1,21 @@
 import React from 'react';
 
 const ActionProvider = ({ createChatBotMessage, setState, children }) => {
-    console.log("ActionProvider rendered");
-
+ 
     const initialAction = () => {
-        console.log('initialAction called');
-        const message = createChatBotMessage('Just type in your name to begin.');
+         const message = createChatBotMessage('Just type in your name to begin.');
         updateState(message, "name");
     }
 
     const afterNameMessage = () => {
-        console.log('afterNameMessage called');
-        const message = createChatBotMessage("What would you like to do?", {
+         const message = createChatBotMessage("What would you like to do?", {
             widget: "options",
         });
         updateState(message, "options");
     }
 
     const handleOption = (option) => {
-        console.log('handleOption called with option:', option);
-        let message;
+         let message;
         switch(option) {
             case '1':
                 message = createChatBotMessage("Great! Let's play a game here are the steps. create account/login -> on navbar click game ->click play .");
@@ -39,8 +35,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
     }
 
     const updateState = (message, checker) => {
-        console.log('updateState called with checker:', checker);
-        setState((prev) => ({
+         setState((prev) => ({
             ...prev,
             messages: [...prev.messages, message],
             checker,

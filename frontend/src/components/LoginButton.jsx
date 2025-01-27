@@ -6,8 +6,7 @@ import { UserContext } from '../App';
 const LoginButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
-  console.log(isLoggedIn)
-  useEffect(() => {
+   useEffect(() => {
     const token = localStorage.getItem('token');
 
     if (token) {
@@ -16,8 +15,7 @@ const LoginButton = () => {
       const currentTime = Date.now() / 1000;
 
       if (decodedToken.exp < currentTime) {
-        console.log('Token expired');
-        setIsLoggedIn(false); // Token expired, show login button
+         setIsLoggedIn(false); // Token expired, show login button
       } else {
         setIsLoggedIn(true); // Valid token, hide login button
       }

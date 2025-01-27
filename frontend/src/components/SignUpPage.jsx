@@ -11,8 +11,7 @@ const sendFormData = async (formData) => {
                 'Content-Type': 'application/json',
             },
         });
-        console.log('Response:', response.data);
-        return true
+         return true
     } catch (error) {
         console.log(error) 
         return
@@ -41,10 +40,8 @@ const SignUpPage = () => {
     
     
     const handleChange = (e) => {
-        console.log("name and val is ")
-        const { name, value } = e.target;
-        console.log(name,value)
-        setFormData((prev) => ({
+         const { name, value } = e.target;
+         setFormData((prev) => ({
             ...prev,
             [name]: value,
         }));

@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import profile from '../assets/profile.png';
 import { useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
-import LoginPage from './LoginPage';
+ import LoginPage from './LoginPage';
 import { backendUrl } from '../App';
 const Profile = () => {
   // Profile data object

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-
+import { backendUrl} from '../../App';
 function Admin_home() {
   const [parents, setparents] = useState([]);
 
@@ -10,7 +10,7 @@ function Admin_home() {
     const fetchparents = async () => {
       try {
         const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
-        const response = await axios.get('http://localhost:3000/admin/all_user', {
+        const response = await axios.get(`${backendUrl}/admin/all_user`, {
           headers: {
             "Authorization": 'Bearer ' + token,
           }
@@ -43,7 +43,7 @@ function Admin_home() {
         <thead>
           <tr>
             <th className="py-2 px-4 border-b">Name</th>
-            <th className="py-2 px-4 border-b">Email</th>
+            <th className="py-2 px-4 border-b">Email3</th>
             <th className="py-2 px-4 border-b">Phone_NO</th>
           </tr>
         </thead>

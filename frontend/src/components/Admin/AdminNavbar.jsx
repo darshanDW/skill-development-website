@@ -30,7 +30,7 @@ function AdminNavbar() {
         <div className='hidden md:flex gap-8'>
           <ul className='flex gap-8 pt-2 text-gray-700'>
             <li className='cursor-pointer hover:text-black'><a href="/Admin_home">User_List</a></li>
-            <li className='cursor-pointer hover:text-black'><a href="/Skills">Skill</a></li>
+            <li className='cursor-pointer hover:text-black'><a href="/Skills">Skills</a></li>
       
           </ul>
         </div>
@@ -46,7 +46,7 @@ function AdminNavbar() {
         <div className='md:hidden mt-4'>
           <ul className='flex flex-col gap-4 text-gray-700'>
             <li className='cursor-pointer hover:text-black'><a href="/Admin_home">Contact_list</a></li>
-            <li className='cursor-pointer hover:text-black'><a href="/Profile">Profile</a></li>
+            <li className='cursor-pointer hover:text-black'><a href="/Skills">Skills</a></li>
            
             {isLoggedIn ? (
               <button

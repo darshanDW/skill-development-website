@@ -62,9 +62,9 @@ router.get('/all_content', auth_middleware, async (req, res) => {
 
 router.post('/upload_file', auth_middleware, async (req, res) => {
     try {
-        const { subject, topic, pdf_link } = req.body;
+        const { subject, topic, pdf_link ,pdf_name } = req.body;
 
-        if (!subject || !topic || !pdf_link) {
+        if (!subject || !topic || !pdf_link ) {
             return res.status(400).json({ msg: "Subject, topic, and PDF link are required" });
         }
 
@@ -80,12 +80,12 @@ router.post('/upload_file', auth_middleware, async (req, res) => {
 
             if (existingTopic) {
                 // Add the new PDF to the existing topic
-                existingTopic.pdfs.push({ link: pdf_link });
+                existingTopic.pdfs.push({ name: pdf_name,link: pdf_link });
             } else {
                 // Add a new topic with the PDF
                 existingSubject.topics.push({
                     name: topic.trim(),
-                    pdfs: [{ link: pdf_link }],
+                    pdfs: [{ name: pdf_name,link: pdf_link }],
                 });
             }
 
@@ -98,7 +98,7 @@ router.post('/upload_file', auth_middleware, async (req, res) => {
                 subject: normalizedSubject,
                 topics: [{
                     name: topic.trim(),
-                    pdfs: [{ link: pdf_link }],
+                    pdfs: [{name: pdf_name, link: pdf_link }],
                 }],
             });
 

@@ -22,8 +22,7 @@ const SkillsPage = () => {
       });
 
       setSkillsData(response.data.content);
-      console.log('Skills data:', response.data.content);
-    } catch (error) {
+     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
@@ -34,8 +33,7 @@ const SkillsPage = () => {
       const decodedToken = jwtDecode(token);
       const currentTime = Date.now() / 1000;
       if (decodedToken.exp < currentTime) {
-        console.log('Token expired');
-        toggleModal()
+         toggleModal()
       }
       else {
         fetchData()
@@ -108,8 +106,7 @@ const SkillsPage = () => {
             return subject;
           }).filter(Boolean) // Remove null subjects
         );
-        console.log('PDF deleted successfully');
-      }
+       }
     } catch (err) {
       console.log(err)
     }
@@ -147,14 +144,14 @@ const SkillsPage = () => {
                       {topic.name}
                     </summary>
                     <div className="mt-2 space-y-2">
-                      {topic.pdfs.map((pdf, pdfIndex) => (
+                       {topic.pdfs.map((pdf, pdfIndex) => (
                         <p key={pdfIndex} className=" flex ml-4 text-gray-700">
                           PDF Link: <a
                             href={pdf.link}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-500 underline hover:text-blue-700">
-                            {pdf.link}
+                            {pdf.name}
                           </a>
                           <br />
                           {isAdmin && <button className="flex-row ml-1 px-1  bg-pink-500 text-white text-sm rounded-md hover:bg-pink-600 transition duration-200" onClick={() => handleDelete(subjectData._id, topic._id, pdf._id)}

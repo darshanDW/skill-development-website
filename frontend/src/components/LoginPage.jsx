@@ -7,12 +7,8 @@ import { backendUrl } from '../App.jsx';
 import { UserContext } from '../App';
 const LoginPage = ({ closeModal }) => {
     const [customer, setcustomer] = useState('user')
-    console.log(backendUrl)
-
-
+ 
     const { setIsLoggedIn } = useContext(UserContext);
-
-
 
     const [formData, setFormData] = useState({
         email: '',
@@ -43,7 +39,6 @@ const LoginPage = ({ closeModal }) => {
             return;
         }
 
-
         try {
             // Make a POST request using axios
             const response = await axios.post(`${backendUrl}/${customer}/signin`, {
@@ -54,22 +49,16 @@ const LoginPage = ({ closeModal }) => {
             // If sign-in is successful
             if (response.status === 200) {
                 const { token } = response.data;
-                console.log(response)
-                // Store the token in localStorage
+                 // Store the token in localStorage
                 localStorage.setItem('token', token);
-                console.log(1)
-                setIsLoggedIn(true)
-                console.log(2)
-                // Show success toast
+                 setIsLoggedIn(true)
+                 // Show success toast
 
                 // Navigate to the homepage
-                console.log('Email:', email);
-                console.log('Password:', password);
-                setFormData({ email: '', password: '' });
+                 setFormData({ email: '', password: '' });
                 // <<<<<<< Updated upstream
                 toast.success("Login Successfully!");
                 customer === 'admin' ? window.location.href = "/Admin_home" : window.location.href = "/";
-
 
                 toast.success("Login Successfully!",);
                 window.location.href = "/";
@@ -79,19 +68,14 @@ const LoginPage = ({ closeModal }) => {
             }
         } catch (error) {
             // Handle error scenarios
-            console.log("error in login", error);
-            if (error.response) {
+             if (error.response) {
                 // Server responded with a status other than 200 range
                 toast.error(error.response.data.msg || 'Login failed.');
             } else {
                 // Something else went wrong
                 toast.error('An error occurred. Please try again.');
             }
-            console.error('Error:', error);
-        }
-
-
-
+         }
     };
 
     return (
@@ -121,7 +105,7 @@ const LoginPage = ({ closeModal }) => {
                 {customer === 'user' ? (
                     <button onClick={() => { setcustomer('admin') }}>login as admin</button>
                 ) : (
-                    <button>login as user</button>
+                    <button onClick={() => { setcustomer('user') }} >login as user</button>
                 )}
             </p>
             <p className="mt-4 text-center text-gray-600">

@@ -6,7 +6,7 @@ const pdfSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  description: {
+  name: {
     type: String,
     required: false, // Optional description for the PDF
   },
