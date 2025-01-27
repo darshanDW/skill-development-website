@@ -3,7 +3,9 @@ import logo from '../../assets/logo.png';
 import LoginButton from '../LoginButton';
 import { FaBars, FaTimes } from 'react-icons/fa'; // Icons for hamburger and close menu
 import { UserContext } from '../../App';
+import { useNavigate } from 'react-router-dom';
 function AdminNavbar() {
+  const navigate=useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // State to track mobile menu
   const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
 
@@ -45,7 +47,7 @@ function AdminNavbar() {
       {isMobileMenuOpen && (
         <div className='md:hidden mt-4'>
           <ul className='flex flex-col gap-4 text-gray-700'>
-            <li className='cursor-pointer hover:text-black'><a href="/Admin_home">Contact_list</a></li>
+            <li className='cursor-pointer hover:text-black'><a href="/Admin_home">User_List</a></li>
             <li className='cursor-pointer hover:text-black'><a href="/Skills">Skills</a></li>
            
             {isLoggedIn ? (
@@ -55,6 +57,8 @@ function AdminNavbar() {
                   localStorage.removeItem('token');
                   setIsLoggedIn(false)
                   window.location.reload();
+                  navigate('/')
+                  
                 }}
               >
                 Logout

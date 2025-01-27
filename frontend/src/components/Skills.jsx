@@ -146,7 +146,7 @@ const SkillsPage = () => {
                     <div className="mt-2 space-y-2">
                        {topic.pdfs.map((pdf, pdfIndex) => (
                         <p key={pdfIndex} className=" flex ml-4 text-gray-700">
-                          PDF Link: <a
+                          PDF Link   : <a
                             href={pdf.link}
                             target="_blank"
                             rel="noopener noreferrer"

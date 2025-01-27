@@ -13,7 +13,7 @@ import Skills from '../components/Skills';
 function Routing() {
   return (
     <div>
-      <BrowserRouter>
+    
         <Routes>
           <Route path='/' element={<Home />} ></Route>
           <Route path='/Contact' element={<Contact />} ></Route>
@@ -26,7 +26,7 @@ function Routing() {
           <Route path='/Skills' element={<Skills />} ></Route>
 
         </Routes>
-      </BrowserRouter>
+      
     </div>
   );
 }

@@ -5,7 +5,7 @@ import Navbar from './components/Navbar';
 import AdminNavbar from './components/Admin/AdminNavbar';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-
+import { BrowserRouter } from 'react-router-dom';
 
 export const UserContext = React.createContext(null);
 export const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -30,6 +30,7 @@ function App() {
   }, []);
   
   return (
+    <BrowserRouter>
     <UserContext.Provider value={{ isLoggedIn, isAdmin, setIsLoggedIn }}>
       <div className="flex flex-col min-h-screen bg-gradient-to-tr from-lime-100 to-pink-200">
         {isAdmin ? 
@@ -41,6 +42,7 @@ function App() {
         <Footer className="bg-gray-800 text-white text-center py-4 mt-4" />
       </div>
     </UserContext.Provider>
+    </BrowserRouter>
   );
 }
 

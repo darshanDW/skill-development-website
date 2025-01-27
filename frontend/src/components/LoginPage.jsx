@@ -7,6 +7,7 @@ import { backendUrl } from '../App.jsx';
 import { UserContext } from '../App';
 const LoginPage = ({ closeModal }) => {
     const [customer, setcustomer] = useState('user')
+     const [loading, setLoading] = useState(false);
  
     const { setIsLoggedIn } = useContext(UserContext);
 
@@ -38,6 +39,7 @@ const LoginPage = ({ closeModal }) => {
             toast.error('Password must be at least 6 characters long.');
             return;
         }
+        setLoading(true);
 
         try {
             // Make a POST request using axios
@@ -53,6 +55,7 @@ const LoginPage = ({ closeModal }) => {
                 localStorage.setItem('token', token);
                  setIsLoggedIn(true)
                  // Show success toast
+                 setLoading(false); // Set loading to false after response
 
                 // Navigate to the homepage
                  setFormData({ email: '', password: '' });
@@ -64,9 +67,13 @@ const LoginPage = ({ closeModal }) => {
                 window.location.href = "/";
                 // >>>>>>> Stashed changes
             } else {
+                setLoading(false);
+
                 toast.error(response.data.msg || 'Login failed.');
             }
         } catch (error) {
+            setLoading(false);
+
             // Handle error scenarios
              if (error.response) {
                 // Server responded with a status other than 200 range
@@ -96,10 +103,12 @@ const LoginPage = ({ closeModal }) => {
                 />
                 <button
                     type="submit"
+                    disabled={loading}
+
                     className="w-full bg-pink-500 text-white py-2 rounded-md hover:bg-pink-600 transition duration-200"
                 >
-                    Login
-                </button>
+                        {loading ? 'Login...' : 'Login'}
+                        </button>
             </form>
             <p>
                 {customer === 'user' ? (

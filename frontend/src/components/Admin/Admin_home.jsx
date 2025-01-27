@@ -3,9 +3,34 @@ import axios from 'axios';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { backendUrl} from '../../App';
+import LoginPage from '../LoginPage';
+import { jwtDecode } from 'jwt-decode';
+
 function Admin_home() {
   const [parents, setparents] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
 
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+      if (decodedToken.exp < currentTime) {
+         toggleModal()
+      }
+      else {
+        fetchData()
+
+      }
+
+
+
+    }
+    else {
+      toggleModal()
+    }
+
+  }, [])
   useEffect(() => {
     const fetchparents = async () => {
       try {
@@ -24,6 +49,11 @@ function Admin_home() {
 
     fetchparents();
   }, []);
+
+ 
+    const toggleModal = () => {
+      setIsModalOpen(!isModalOpen);
+    };
 
   const downloadPDF = () => {
     const doc = new jsPDF();
@@ -57,6 +87,16 @@ function Admin_home() {
           ))}
         </tbody>
       </table>
+      {
+        isModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+            <div className="relative bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+              {/* Render the LoginPage and pass closeModal prop */}
+              <LoginPage closeModal={toggleModal} />
+            </div>
+          </div>
+        )
+      }
     </div>
   );
 }

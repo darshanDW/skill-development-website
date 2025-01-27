@@ -2,11 +2,14 @@ import React, { useEffect, useState, useContext } from 'react';
 import LoginPage from './LoginPage'; // Import LoginPage
 import { jwtDecode } from 'jwt-decode';
 import { UserContext } from '../App';
-
+import { useNavigate } from 'react-router-dom';
 const LoginButton = () => {
+const navigate=useNavigate();
+
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
-   useEffect(() => {
+  const { isLoggedIn, setIsLoggedIn ,isAdmin} = useContext(UserContext);
+  useEffect(() => {
     const token = localStorage.getItem('token');
 
     if (token) {
@@ -15,7 +18,7 @@ const LoginButton = () => {
       const currentTime = Date.now() / 1000;
 
       if (decodedToken.exp < currentTime) {
-         setIsLoggedIn(false); // Token expired, show login button
+        setIsLoggedIn(false); // Token expired, show login button
       } else {
         setIsLoggedIn(true); // Valid token, hide login button
       }
@@ -47,6 +50,10 @@ const LoginButton = () => {
           onClick={() => {
             localStorage.removeItem('token');
             setIsLoggedIn(false) // Remove the token from localStorage
+if(!isAdmin){
+  navigate('/')
+}
+
             window.location.reload(); // Reload the page to update the logged-in state
           }}
         >

@@ -2,23 +2,33 @@ import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
-import {useNavigate} from 'react-router-dom';
-import { backendUrl } from '../App';
+import { useNavigate } from 'react-router-dom';
+import { backendUrl, UserContext } from '../App';
+import { useContext } from 'react';
+
 const sendFormData = async (formData) => {
+
+
     try {
         const response = await axios.post(`${backendUrl}/user/signup`, formData, {
             headers: {
                 'Content-Type': 'application/json',
             },
         });
-         return true
+        return true
     } catch (error) {
-        console.log(error) 
+        toast.error(error.response.data.msg)
+
+        console.log(error.response.data.msg)
         return
     }
 };
 
 const SignUpPage = () => {
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
+
     const [formData, setFormData] = useState({
         email: '',
         username: '',
@@ -34,20 +44,20 @@ const SignUpPage = () => {
         dateOfBirth: '',
         age: null,
     });
-    
+
     const [showOtherInput, setShowOtherInput] = useState(false);
     const notify = (message) => toast.error(message);
-    
-    
+
+
     const handleChange = (e) => {
-         const { name, value } = e.target;
-         setFormData((prev) => ({
+        const { name, value } = e.target;
+        setFormData((prev) => ({
             ...prev,
             [name]: value,
         }));
 
     };
-    
+
     const handleHobbiesChange = (e) => {
         const options = e.target.options;
         const selectedValues = [];
@@ -63,19 +73,19 @@ const SignUpPage = () => {
         // Check if "Other" is selected to show/hide the input
         setShowOtherInput(selectedValues.includes('Other'));
     };
-    
+
     const calculateAge = (dob) => {
         const birthDate = new Date(dob);
         const today = new Date();
         let age = today.getFullYear() - birthDate.getFullYear();
         const monthDiff = today.getMonth() - birthDate.getMonth();
-        
+
         if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
             age--;
         }
         return age;
     };
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -84,6 +94,7 @@ const SignUpPage = () => {
         if (!formData.username) return toast.error('Username is required');
         if (!formData.password) return toast.error('Password is required');
         if (!formData.parentName) return toast.error('Parent name is required');
+
         if (!formData.mobileNo || !/^\d{10}$/.test(formData.mobileNo)) {
             return toast.error('Valid mobile number (10 digits) is required');
         }
@@ -100,20 +111,23 @@ const SignUpPage = () => {
         // Validate age
         const age = calculateAge(formData.dateOfBirth);
         if (age < 6 || age > 16) {
+            setLoading(false);
             return toast.error('Child must be between 6 to 16 years old');
         }
 
         // Update formData with calculated age
         const updatedFormData = { ...formData, age };
         setFormData(updatedFormData);
-
+        setLoading(true);
         // Submit form data
         const success = await sendFormData(updatedFormData);
+        setLoading(false); // Set loading to false after response
+
         if (success) {
             toast.success('Form submitted successfully!');
             setFormData({
                 email: '',
-                username: '',  
+                username: '',
                 password: '',
                 parentName: '',
                 mobileNo: '',
@@ -126,9 +140,10 @@ const SignUpPage = () => {
                 dateOfBirth: '',
                 age: null,
             });
-             navigate('/');
+            setIsLoggedIn(true)
+            navigate('/');
         } else {
-            toast.error('Failed to submit the form. Please try again.');
+            setLoading(false);
         }
     };
 
@@ -323,9 +338,11 @@ const SignUpPage = () => {
 
                     <button
                         type="submit"
-                        className="w-full px-4 py-2 text-white bg-purple-600 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        disabled={loading}
+                        className={`w-full px-4 py-2 text-white bg-purple-600 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 ${loading ? 'cursor-not-allowed opacity-75' : ''
+                            }`}
                     >
-                        Sign Up
+                        {loading ? 'Signing Up...' : 'Sign Up'}
                     </button>
                 </form>
                 <p className="mt-4 text-center text-gray-600">
