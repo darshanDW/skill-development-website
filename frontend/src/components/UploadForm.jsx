@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { gapi } from 'gapi-script';
 import axios from 'axios';
 import { backendUrl } from '../App';
+
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID; // Replace with your Google Client ID
 const API_KEY = import.meta.env.VITE_API_KEY; // Replace with your API Key
 const SCOPE = 'https://www.googleapis.com/auth/drive.file';
@@ -12,6 +13,7 @@ const UploadForm = ({ onClose }) => {
   const [topic, setTopic] = useState('');
   const [pdf_name, setpdf_name] = useState('');
   const [file, setFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false); // Loading state
 
   const initializeGapi = () => {
     return new Promise((resolve, reject) => {
@@ -45,12 +47,14 @@ const UploadForm = ({ onClose }) => {
   };
 
   const handleFileUpload = async () => {
-    if (!file) { 
+    if (!file) {
       alert('Please select a file to upload.');
       return;
     }
 
     try {
+      setIsUploading(true); // Start loading state
+
       const accessToken = gapi.auth2
         .getAuthInstance()
         .currentUser.get()
@@ -81,36 +85,46 @@ const UploadForm = ({ onClose }) => {
       );
 
       const result = await response.json();
-       alert(`File uploaded successfully! File ID: ${result.id}`);
 
-      // Send subject, topic, and file URL to the backend
+      alert(`File uploaded successfully! File ID: ${result.id}`);
+
       const pdf_link = `https://drive.google.com/file/d/${result.id}/view`;
       const postData = {
         subject,
         topic,
         pdf_link,
-        pdf_name
+        pdf_name,
       };
- 
+
       try {
-        const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
-        const backendResponse = await axios.post(`${backendUrl}/admin/upload_file`, postData, {
+        const token = localStorage.getItem('token');
+        await axios.post(`${backendUrl}/admin/upload_file`, postData, {
           headers: {
-            "Content-Type": "application/json",
-            "Authorization": 'Bearer ' + token,
-          }
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token,
+          },
         });
 
-         alert('Data sent to backend successfully!');
+        alert('Data sent to backend successfully!');
       } catch (backendError) {
-        console.error('Error from backend:', backendError.response ? backendError.response.data : backendError.message);
-        alert(`Error from backend: ${backendError.response ? backendError.response.data.msg : backendError.message}`);
+        console.error(
+          'Error from backend:',
+          backendError.response ? backendError.response.data : backendError.message
+        );
+        alert(
+          `Error from backend: ${
+            backendError.response ? backendError.response.data.msg : backendError.message
+          }`
+        );
       }
 
       onClose();
     } catch (error) {
       console.error('Error uploading file:', error);
       alert('File upload failed.');
+      setIsUploading(false); // End loading state
+    } finally {
+      setIsUploading(false); // End loading state
     }
   };
 
@@ -169,14 +183,16 @@ const UploadForm = ({ onClose }) => {
               type="button"
               onClick={onClose}
               className="mr-4 py-2 px-4 bg-gray-300 rounded-md"
+              disabled={isUploading} // Disable during upload
             >
               Cancel
             </button>
             <button
               type="submit"
               className="py-2 px-4 bg-blue-500 text-white rounded-md"
+              disabled={isUploading} // Disable during upload
             >
-              Upload
+              {isUploading ? 'Uploading...' : 'Upload'} {/* Change button text */}
             </button>
           </div>
         </form>

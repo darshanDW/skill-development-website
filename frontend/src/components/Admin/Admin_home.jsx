@@ -9,43 +9,44 @@ import { jwtDecode } from 'jwt-decode';
 function Admin_home() {
   const [parents, setparents] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // useEffect(() => {
-  //   const token = localStorage.getItem('token');
-
-  //   if (token) {
-  //     const decodedToken = jwtDecode(token);
-  //     const currentTime = Date.now() / 1000;
-  //     if (decodedToken.exp < currentTime) {
-  //        toggleModal()
-  //     }
-  //     else {
-  //       fetchData()
-
-  //     }
-
-
-
-  //   }
-  //   else {
-  //     toggleModal()
-  //   }
-
-  // }, [])
+  const fetchparents = async () => {
+    try {
+      const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+      const response = await axios.get(`${backendUrl}/admin/all_user`, {
+        headers: {
+          "Authorization": 'Bearer ' + token,
+        }
+      });
+      console.log(response.data)
+      setparents(response.data.users);
+    } catch (error) {
+      console.error('Error fetching parents:', error);
+    }
+  };
   useEffect(() => {
-    const fetchparents = async () => {
-      try {
-        const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
-        const response = await axios.get(`${backendUrl}/admin/all_user`, {
-          headers: {
-            "Authorization": 'Bearer ' + token,
-          }
-        });
-        console.log(response.data)
-        setparents(response.data.users);
-      } catch (error) {
-        console.error('Error fetching parents:', error);
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+      if (decodedToken.exp < currentTime) {
+         toggleModal()
       }
-    };
+      else {
+        fetchparents()
+
+      }
+
+
+
+    }
+    else {
+      toggleModal()
+    }
+
+  }, [])
+  useEffect(() => {
+   
 
     fetchparents();
   }, []);
