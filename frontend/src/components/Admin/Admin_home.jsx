@@ -9,28 +9,28 @@ import { jwtDecode } from 'jwt-decode';
 function Admin_home() {
   const [parents, setparents] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  useEffect(() => {
-    const token = localStorage.getItem('token');
+  // useEffect(() => {
+  //   const token = localStorage.getItem('token');
 
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      const currentTime = Date.now() / 1000;
-      if (decodedToken.exp < currentTime) {
-         toggleModal()
-      }
-      else {
-        fetchData()
+  //   if (token) {
+  //     const decodedToken = jwtDecode(token);
+  //     const currentTime = Date.now() / 1000;
+  //     if (decodedToken.exp < currentTime) {
+  //        toggleModal()
+  //     }
+  //     else {
+  //       fetchData()
 
-      }
+  //     }
 
 
 
-    }
-    else {
-      toggleModal()
-    }
+  //   }
+  //   else {
+  //     toggleModal()
+  //   }
 
-  }, [])
+  // }, [])
   useEffect(() => {
     const fetchparents = async () => {
       try {
